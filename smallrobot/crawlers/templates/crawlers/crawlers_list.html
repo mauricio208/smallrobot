@@ -14,127 +14,79 @@
 
   <body>
     <div class="container-fluid">
-      <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-          <div class="sidebar-sticky">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link active" href="#">
-                  <span data-feather="home"></span>
-                  Dashboard <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file"></span>
-                  Orders
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="shopping-cart"></span>
-                  Products
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="users"></span>
-                  Customers
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="bar-chart-2"></span>
-                  Reports
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="layers"></span>
-                  Integrations
-                </a>
-              </li>
-            </ul>
-
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>Saved reports</span>
-              <a class="d-flex align-items-center text-muted" href="#">
-                <span data-feather="plus-circle"></span>
-              </a>
-            </h6>
-            <ul class="nav flex-column mb-2">
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Current month
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Last quarter
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Social engagement
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file-text"></span>
-                  Year-end sale
-                </a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-          <div class="card" style="">
-            <ul class="list-group list-group-flush">
-              {% for crawler in object_list%}
-                <li class="list-group-item">
+      <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+          <a class="navbar-brand" href="#">small-robot</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item active">
+                  <a class="nav-link" href="#">My Crawlers<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Account</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Log out</a>
+                </li>
+              </ul>
+            </div>
+      </nav>
+      <div class="row justify-content-around" style="padding:20px">
+        <div class="col-md-10 col-lg-8 col-sm-auto ">
+          {% for crawler in object_list%}
+            <div class="card" style="">
+              <div class="card-header" id="heading{{crawler.id}}">
+              
+                    <button class="btn btn-block bg-transparent " type="button" data-toggle="collapse" data-target="#collapse{{crawler.id}}" aria-expanded="true" aria-controls="collapseOne">
+                      <h2>{{crawler.name}}</h2> 
+                    </button>
+  
+              </div>
+              <div id="collapse{{crawler.id}}" class="collapse hide" aria-labelledby="heading{{crawler.id}}" data-parent="#accordion">
+                <div class="card-body">
                   <div class="row">
-                    <div class="col-12">
-                      <h2>{{crawler.name}}</h2>
-                    </div>
-                    <div class="col">
-                      <form class="runCrawlerForm" action="/crawlers/run">
-                          <input name="crawlerid" type="number" value="{{crawler.id}}" hidden >
-                          <div class="form-group">
-                            {% for arg in crawler.args %}
-                              <label for="{{arg}}">{{arg}}</label>
-                              <input name="{{arg}}" class="form-control" placeholder="Enter {{arg}}">
-                            {% endfor %}
-                          </div>
-                          <button type="submit" class="btn btn-primary btn-lg btn-block">Run Crawler</button>
-                        </form>       
-                    </div>
+                      <form class="runCrawlerForm col" action="/crawlers/run">
+                        <input name="crawlerid" type="number" value="{{crawler.id}}" hidden >
+                        <div class="form-group">
+                          {% for arg in crawler.args %}
+                            <label for="{{arg}}">{{arg}}</label>
+                            <input name="{{arg}}" class="form-control" placeholder="Enter {{arg}}">
+                          {% endfor %}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Run Crawler</button>
+                      </form>       
                   </div> 
                   <div class="row">
-                    <div class="col-12" style="text-align:center;">
-                      <div class="fa-2x">
-                        <i class="fas fa-circle-notch fa-spin"></i>
+                    <div class="col-12" style="padding:15px;">
+                      <h4 class="col-12" style="text-align:center;">Results</h4>
+                      <div class="list-group" style="height:200px;overflow-y: scroll;">
+                        <div class="list-group-item">
+                          <div class="col-12" style="text-align:center;color:grey;">
+                              <div class="fa-2x">
+                                  <i class="fas fa-circle-notch fa-spin"></i>
+                              </div>
+                          </div>
+                        </div>                    
+                        {% for result in crawler.results %}
+                          <div class="list-group-item">
+                              <div class="col text-muted" style="text-align:center;">
+                              {{result.date_time}}
+                            </div>
+                            <div class="col" style="text-align:center;">
+                              <a class="btn btn-success" href="{{result.data.url}}" role="button"><i class="fas fa-download" data-fa-transform="grow-2"></i></a>
+                            </div>
+                          </div>
+                        {% endfor %}
                       </div>
                     </div>
-                    {% for result in crawler.results %}
-                      <div class="col-6" style="text-align:center;">
-                        {{result.date_time}}
-                      </div>
-                      <div class="col-6">
-                        <a class="btn btn-success" href="{{result.data.url}}" role="button"><i class="fas fa-download" data-fa-transform="grow-2"></i></a>
-                      </div>
-                    {% endfor %}
                   </div>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
-
-           
-        </main>
+                </div>
+              </div>      
+            </div>
+          {% endfor %}
+        </div>
       </div>
     </div>
     <script
