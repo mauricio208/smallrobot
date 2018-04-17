@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'crawlers.apps.CrawlersConfig',
-    'usermanagement.apps.UsermanagementConfig',
+    'accounts.apps.AccountsConfig',
     'background_task',
     'django.contrib.admin',
     'django.contrib.auth',

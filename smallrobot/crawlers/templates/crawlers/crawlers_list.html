@@ -28,7 +28,7 @@
                   <a class="nav-link" href="#">Account</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Log out</a>
+                  <a class="nav-link" href="/accounts/logout">Log out</a>
                 </li>
               </ul>
             </div>
@@ -85,6 +85,8 @@
                 </div>
               </div>      
             </div>
+          {% empty %}
+            <h1>No crawlers associated with this account</h1>
           {% endfor %}
         </div>
       </div>
