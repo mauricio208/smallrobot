@@ -1,9 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 class Crawler(models.Model):
     name = models.CharField(max_length=200,  blank=False)
     path = models.TextField(blank=False)
     options = models.TextField()
+    user = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
 
     @property
     def args(self):

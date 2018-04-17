@@ -36,8 +36,8 @@
       <div class="row justify-content-around" style="padding:20px">
         <div class="col-md-10 col-lg-8 col-sm-auto ">
           {% for crawler in object_list%}
-            <div class="card" style="">
-              <div class="card-header" id="heading{{crawler.id}}">
+            <div id="crawler-{{crawler.id}}" class="card" style="">
+              <div class="card-header " id="heading{{crawler.id}}">
               
                     <button class="btn btn-block bg-transparent " type="button" data-toggle="collapse" data-target="#collapse{{crawler.id}}" aria-expanded="true" aria-controls="collapseOne">
                       <h2>{{crawler.name}}</h2> 
@@ -48,7 +48,7 @@
                 <div class="card-body">
                   <div class="row">
                       <form class="runCrawlerForm col" action="/crawlers/run">
-                        <input name="crawlerid" type="number" value="{{crawler.id}}" hidden >
+                        <input name="crawlerid" value="{{crawler.id}}" hidden >
                         <div class="form-group">
                           {% for arg in crawler.args %}
                             <label for="{{arg}}">{{arg}}</label>
@@ -61,8 +61,8 @@
                   <div class="row">
                     <div class="col-12" style="padding:15px;">
                       <h4 class="col-12" style="text-align:center;">Results</h4>
-                      <div class="list-group" style="height:200px;overflow-y: scroll;">
-                        <div class="list-group-item">
+                      <div class="list-group crawler-results" style="height:200px;overflow-y: scroll;">
+                        <div class="list-group-item loading-result d-none" >
                           <div class="col-12" style="text-align:center;color:grey;">
                               <div class="fa-2x">
                                   <i class="fas fa-circle-notch fa-spin"></i>
@@ -70,7 +70,7 @@
                           </div>
                         </div>                    
                         {% for result in crawler.results %}
-                          <div class="list-group-item">
+                          <div class="list-group-item" id="result-{{result.id}}">
                               <div class="col text-muted" style="text-align:center;">
                               {{result.date_time}}
                             </div>
