@@ -18,7 +18,7 @@ class LogIn(TemplateView):
         if user is not None:
             login(request, user)
             return HttpResponseRedirect('/crawlers/list')
-        render(request, self.template_name, {error:"User doesn't exist, or the is some error on the log in data"})
+        return render(request, self.template_name, {'error':"User doesn't exist, or the is some error on the log in data"})
 
 def log_out(request):
     logout(request)

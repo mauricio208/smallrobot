@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
+ON_PRODUCTION = False
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -19,12 +20,19 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-xsj9mm$=qc_u+56spi!n)cl6j@3qwj9owj@(m*j%eta@fm2r&'
+if ON_PRODUCTION:
+    SECRET_KEY = os.environ['SECRET_KEY']
+else:
+    SECRET_KEY = '-xsj9mm$=qc_u+56spi!n)cl6j@3qwj9owj@(m*j%eta@fm2r&'
+    
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
+DEBUG = not ON_PRODUCTION
 
 ALLOWED_HOSTS = []
+if ON_PRODUCTION:
+    ALLOWED_HOSTS = ['128.199.49.38']
 
 
 # Application definition
@@ -74,13 +82,25 @@ WSGI_APPLICATION = 'smallrobot.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if ON_PRODUCTION:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'smallrobot',
+            'USER': os.environ['SMALLROBOTDB_USER'] 'srobotadmin',
+            'PASSWORD': os.environ['SMALLROBOTDB_USER_PASSWORD'] 'robots2018',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+
 
 
 # Password validation
@@ -122,7 +142,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "smallrobot/static"),
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
