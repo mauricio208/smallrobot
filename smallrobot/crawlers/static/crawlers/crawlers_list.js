@@ -23,16 +23,16 @@ function checkForResults(crawlerId) {
   })
 }
 
-$('.runCrawlerForm').submit(function (event) {
-  event.preventDefault();
-  var form=$(this);
-  var cid = form.find('input[name=crawlerid]').attr('value');
-  $.get( form.attr('action'), form.serialize(), function( data ) {
-    console.log( data );
-    var cr=$('#crawler-'+cid).find('.crawler-results');
-    var rl=cr.find('.loading-result');
-    rl.removeClass('d-none');
-    setTimeout(()=>checkForResults(cid),30000);
-  });
-  return false;
-})
+// $('.runCrawlerForm').submit(function (event) {
+//   event.preventDefault();
+//   var form=$(this);
+//   var cid = form.find('input[name=crawlerid]').attr('value');
+//   $.get( form.attr('action'), form.serialize(), function( data ) {
+//     console.log( data );
+//     var cr=$('#crawler-'+cid).find('.crawler-results');
+//     var rl=cr.find('.loading-result');
+//     rl.removeClass('d-none');
+//     setTimeout(()=>checkForResults(cid),30000);
+//   });
+//   return false;
+// })

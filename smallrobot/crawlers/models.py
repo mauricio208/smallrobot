@@ -18,7 +18,7 @@ class Crawler(models.Model):
 
 class Result(models.Model):
     crawler = models.ForeignKey('Crawler', blank=False, on_delete=models.CASCADE)
-    data = models.FileField(upload_to='crawlers_results')
+    data = models.FileField(upload_to='crawlers-results')
     date_time = models.DateTimeField(auto_now=True)
 
 

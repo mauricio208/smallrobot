@@ -49,38 +49,28 @@
                   <div class="row">
                       <form class="runCrawlerForm col" action="/crawlers/run">
                         <input name="crawlerid" value="{{crawler.id}}" hidden >
-                        <div class="form-group">
-                          {% for arg in crawler.args %}
-                            <label for="{{arg}}">{{arg}}</label>
-                            <input name="{{arg}}" class="form-control" placeholder="Enter {{arg}}">
-                          {% endfor %}
+                        <div class="row">
+                          <div class="col-9 no-gutters">
+                            <div class="form-group">
+                              {% for arg in crawler.args %}
+                                {% comment %} <label for="{{arg}}">{{arg}}</label> {% endcomment %}
+                                <input name="{{arg}}" class="form-control" placeholder="{{arg}}">
+                              {% endfor %}
+                            </div>
+                          </div>
+                          <div class="col-3 no-gutters">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">Run Crawler</button>
+                          </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">Run Crawler</button>
                       </form>       
                   </div> 
                   <div class="row">
-                    <div class="col-12" style="padding:15px;">
-                      <h4 class="col-12" style="text-align:center;">Results</h4>
-                      <div class="list-group crawler-results" style="height:200px;overflow-y: scroll;">
-                        <div class="list-group-item loading-result d-none" >
-                          <div class="col-12" style="text-align:center;color:grey;">
-                              <div class="fa-2x">
-                                  <i class="fas fa-circle-notch fa-spin"></i>
-                              </div>
-                          </div>
-                        </div>                    
-                        {% for result in crawler.results %}
-                          <div class="list-group-item" id="result-{{result.id}}">
-                              <div class="col text-muted" style="text-align:center;">
-                              {{result.date_time}}
-                            </div>
-                            <div class="col" style="text-align:center;">
-                              <a class="btn btn-success" href="{{result.data.url}}" role="button"><i class="fas fa-download" data-fa-transform="grow-2"></i></a>
-                            </div>
-                          </div>
-                        {% endfor %}
-                      </div>
+                    <div class="col-12" style="text-align:center;color:grey;">
+                        <div class="fa-2x">
+                            <i class="fas fa-circle-notch fa-spin"></i>
+                        </div>
                     </div>
+                    
                   </div>
                 </div>
               </div>      
