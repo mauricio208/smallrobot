@@ -19,6 +19,12 @@ CRAWLERS_RESULT_DIRPATH = os.path.join(settings.MEDIA_ROOT,"crawlers-results")
 
 @background()
 def run_crawler(result_id, args):
+    """
+    Function that execute crawler code and store result info on the Result table
+    param:
+    result_id: id of object result where result will be stored
+    args: list of arguments used for the crawler call
+    """
     result = Result.objects.get(id=result_id)
     path = result.crawler.path
     module_name = re.search(r'(?<=/)\w+.py$', path).group(0)
@@ -49,6 +55,11 @@ class CrawlersList(ListView):
 
 @login_required
 def crawler_runner(request):
+    """
+    View function that enqueue the crawler execution code in background
+    
+    return: HttpResponse object with the id of the result
+    """
     import pudb; pu.db
     crawler_id = request.GET.get('crawlerid')
     crawler = Crawler.objects.get(id=crawler_id)
@@ -65,6 +76,11 @@ def crawler_runner(request):
 
 @login_required
 def download_protected_result(request):
+    """
+    View function that search for the result file and download it to the user
+
+    return: HttpResponse object with the X-Accel-Redirect header containing the path to the file to be downloaded
+    """
     result_id = request.Get.get('resultid')
     result = Result.objects.get(id=result_id)
     response = HttpResponseForbidden()
