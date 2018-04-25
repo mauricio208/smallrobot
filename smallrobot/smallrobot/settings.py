@@ -30,7 +30,7 @@ else:
 
 DEBUG = not ON_PRODUCTION
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 if ON_PRODUCTION:
     ALLOWED_HOSTS = ['128.199.49.38', 'app.small-robot.com']
 
