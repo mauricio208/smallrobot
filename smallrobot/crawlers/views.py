@@ -7,8 +7,10 @@ from .models import *
 
 # from background_task import background
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseServerError, HttpResponseForbidden
 from django.shortcuts import render
+from django.db import transaction
+
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseServerError, HttpResponseForbidden
 from django.core.files import File
 from django.views.generic import ListView
 from django.utils.decorators import method_decorator
@@ -33,17 +35,16 @@ def run_crawler(result_id, args):
     spec.loader.exec_module(crawler_module)
     try:
         result_path = crawler_module.start(**args)
-        with open(result_path) as file_result:
-            result.data=File(file_result)
+        with transaction.atomic():
+            with open(result_path) as file_result:
+                result.data=File(file_result)
+                result.save()
         os.remove(result_path)
-    except expression as e:
-        result.error=True
-        result.error_message=str(e)
-    result.save()
-    # file_extension = os.path.splitext(result_path)[1]
-    # new_filename = str(uuid.uuid1())+file_extension
-    # new_path = os.path.join(CRAWLERS_RESULT_DIRPATH, new_filename)
-    # os.rename(result_path, new_path)
+    except Exception as e:
+        with transaction.atomic():
+            result.error=True
+            result.error_message=str(e)
+            result.save()
 
 @method_decorator(login_required, name='dispatch')
 class CrawlersList(ListView):
@@ -66,7 +67,8 @@ def crawler_runner(request):
     args = {}
     for arg in crawler.args:
         args[arg] = request.GET.get(arg)
-    result = Result(crawler=crawler).save()
+    result = Result(crawler=crawler)
+    result.save()
     filename = run_crawler(result.id, args)
     # # filename = 'file.csv'
     response = HttpResponse(result.id)
@@ -81,12 +83,15 @@ def download_protected_result(request):
 
     return: HttpResponse object with the X-Accel-Redirect header containing the path to the file to be downloaded
     """
-    result_id = request.Get.get('resultid')
+    import pudb; pudb.set_trace()
+    result_id = request.GET.get('resultid')
     result = Result.objects.get(id=result_id)
     response = HttpResponseForbidden()
     if result.crawler.user == request.user:
         if result.error:
             response = HttpResponseServerError(result.error_message)
+        elif not result.data:
+            response = HttpResponseNotFound('loading')
         else:
             filename = os.path.basename(result.data.name)
             response = HttpResponse()

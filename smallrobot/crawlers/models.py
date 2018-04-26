@@ -1,3 +1,4 @@
+import os
 import uuid
 from django import template
 from django.db import models
@@ -30,7 +31,7 @@ class Profile(models.Model):
 def crawler_result_path(instance, filename):
     file_extension = os.path.splitext(filename)[1]
     new_filename = str(uuid.uuid1())+file_extension
-    return 'crawlers-results/{1}'.format(new_filename)
+    return 'crawlers-results/{}'.format(new_filename)
 
 class Result(models.Model):
     crawler = models.ForeignKey('Crawler', on_delete=models.CASCADE)

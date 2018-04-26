@@ -9,18 +9,33 @@ function lastResult(id, dateTime, url){
   </div>`;
 }
 
-function checkForResults(crawlerId) {
-  $.getJSON('lastresult', {'crawlerid':crawlerId},function (data) {
-    var cr=$('#crawler-'+crawlerId).find('.crawler-results');
-    var rl=cr.find('.loading-result');
-    
-    if (rl.next('.list-group-item').attr('id') === "result-"+data.id){
-      setTimeout(()=>checkForResults(crawlerId),30000);
-    }else{
+function checkForResults(resultId) {
+  $.fileDownload(`/crawlers/result?resultid=${resultId}`, {
+    successCallback: function (url) {
+      console.log('sucesscallback');
+      var rl=form.find('.loading-result');
       rl.addClass('d-none');
-      rl.after(lastResult(data.id, data.date_time, data.url))
+    },
+    failCallback: function (responseHtml, url) {
+      if (responseHtml === "loading") {
+        setTimeout(()=>checkForResults(resultId),35000);
+        return false
+      }else{
+        alert('File download failed!');
+      }
     }
-  })
+  });
+  // $.getJSON('lastresult', {'crawlerid':crawlerId},function (data) {
+  //   var cr=$('#crawler-'+crawlerId).find('.crawler-results');
+  //   var rl=cr.find('.loading-result');
+    
+  //   if (rl.next('.list-group-item').attr('id') === "result-"+data.id){
+  //     setTimeout(()=>checkForResults(crawlerId),30000);
+  //   }else{
+  //     rl.addClass('d-none');
+  //     rl.after(lastResult(data.id, data.date_time, data.url))
+  //   }
+  // })
 }
 
 $('.runCrawlerForm').submit(function (event) {
@@ -28,16 +43,21 @@ $('.runCrawlerForm').submit(function (event) {
   var form=$(this);
   var rl=form.find('.loading-result');
   rl.removeClass('d-none');
-  $.fileDownload(form.attr('action')+'?'+form.serialize(), {
-    prepareCallback: function (url) {
-      console.log('sucesscallback');
-      var rl=form.find('.loading-result');
-      rl.addClass('d-none');
-    },
-    failCallback: function (responseHtml, url) {
-      alert('File download failed!');
-    }
+  $.get( form.attr('action'), form.serialize(), function( resultId ) {
+    console.log( resultId );
+    rl.addClass('result-'+resultId);
+    setTimeout(()=>checkForResults(resultId),35000);
   });
+  // $.fileDownload(form.attr('action')+'?'+form.serialize(), {
+  //   prepareCallback: function (url) {
+  //     console.log('sucesscallback');
+  //     var rl=form.find('.loading-result');
+  //     rl.addClass('d-none');
+  //   },
+  //   failCallback: function (responseHtml, url) {
+  //     alert('File download failed!');
+  //   }
+  // });
   return false;
 })
 
