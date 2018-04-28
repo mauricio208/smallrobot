@@ -47,16 +47,19 @@
               <div id="collapse{{crawler.id}}" class="collapse hide" aria-labelledby="heading{{crawler.id}}" data-parent="#accordion">
                 <div class="card-body" style="padding:0;">
                   {% for profile in crawler.profiles %}
-                    <div class="row profile no-gutters" style="padding-top: 1.25em;padding-right: 1.25em;padding-bottom: 1.25em;">
-                      <button type="button" class="removeProfile close" data-toggle="tooltip" data-placement="top" title="Delete this profile" style="padding-right: 0.5em;padding-left: 0.5em;">
-                          <div class="fa-1x">
-                            <i class="fa fa-trash"></i>
-                          </div>
-                      </button>
+                    <div class="row profile " style="padding-top: 1.25em;padding-right: 1.25em;padding-bottom: 1.25em;">
+                      
                       <form class="runCrawlerForm col" action="/crawlers/run">
                         <input name="crawlerid" value="{{crawler.id}}" hidden >
                         <input name="profileid" value="{{profile.id}}" hidden >
-                        <div class="row no-gutters align-items-center">
+                        <div class="row  align-items-center">
+                          <div class="col-1 text-center">
+                              <button type="button" class="removeProfile close" data-toggle="tooltip" data-placement="top" title="Delete this profile" style="padding-right: 0.5em;padding-left: 0.5em;">
+                                  <div class="fa-1x">
+                                    <i class="fa fa-trash"></i>
+                                  </div>
+                              </button>
+                          </div>
                           <div class="col-9  align-items-center">
                             {% for arg in crawler.args %}
                               {% comment %} <label for="{{arg}}">{{arg}}</label> {% endcomment %}
@@ -64,119 +67,70 @@
                               placeholder="{{arg}}" value="{% profile_get profile arg %}" >
                             {% endfor %}
                           </div>
-
-                          <div class="col-3  text-center">
-                            <div class="row">
-                              <div class="col-6">
-                                <button type="submit" class="btn btn-primary btn-lg align-middle">
-                                    <div class="fa-1x">
-                                      <i class="fas fa-download"></i>
-                                    </div>
-                                </button>
-                                <div class="col-12 d-none loading-result" style="text-align:center;color:grey;">
-                                    <div class="fa-2x">
-                                        <i class="fas fa-circle-notch fa-spin"></i>
-                                </div>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                
-                              </div>
+                          <div class="col-2  text-center">
+                            <button type="submit" class="crawler-run-button btn btn-primary btn-lg align-middle">
+                                <div class="fa-1x"><i class="fas fa-download"></i></div>
+                            </button>
+                            <div class="col-12 d-none loading-result" style="text-align:center;color:grey;">
+                                <div class="fa-2x"><i class="fas fa-circle-notch fa-spin"></i></div>
                             </div>
                           </div>
-
                         </div>
-                      </form>       
+                        <div class="error-info col-12 alert alert-dark alert-dismissible rounded-0" role="alert" style="display:none">
+                          There was an error during the execution of the crawler, try again a few minutes later if the problem persist ask for support to the small-robot team
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                      </form> 
+                            
                     </div>
                   {% endfor %}
-                  <div class="row profile no-gutters" style="padding-top: 1.25em;padding-right: 1.25em;padding-bottom: 1.25em;">
-                      <button type="button" class="removeProfile close" data-toggle="tooltip" data-placement="top" title="Delete this profile" style="padding-right: 0.5em;padding-left: 0.5em;">
-                          <div class="fa-1x">
-                            <i class="fa fa-trash"></i>
-                          </div>
-                      </button>
-                      <form class="runCrawlerForm col" action="/crawlers/run">
-                        <input name="crawlerid" value="{{crawler.id}}" hidden >
-                        <input name="profileid" value="" hidden >
-                        <div class="row no-gutters align-items-center">
-                          <div class="col-9  align-items-center">
-                            {% for arg in crawler.args %}
-                              {% comment %} <label for="{{arg}}">{{arg}}</label> {% endcomment %}
-                              <input name="{{arg}}" class="form-control rounded-0" 
-                              placeholder="{{arg}}">
-                            {% endfor %}
-                          </div>
-
-                          <div class="col-3  text-center">
-                            <div class="row">
-                              <div class="col-6">
-                                <button type="submit" class="btn btn-primary btn-lg align-middle">
-                                    <div class="fa-1x">
-                                      <i class="fas fa-download"></i>
-                                    </div>
-                                </button>
-                                <div class="col-12 d-none loading-result" style="text-align:center;color:grey;">
-                                    <div class="fa-2x">
-                                        <i class="fas fa-circle-notch fa-spin"></i>
-                                </div>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                
-                              </div>
-                            </div>
-                          </div>
-
-                        </div>
-                      </form>       
-                  </div> 
                   <div class="row no-gutters">
-                    <button type="button" class="addProfile btn btn-success btn-lg btn-block align-middle rounded-0" data-toggle="tooltip" data-placement="top" title="Delete this profile" style="padding-right: 0.5em;padding-left: 0.5em;">
+                    <button type="button" class="addProfile btn btn-success btn-lg btn-block align-middle rounded-0" data-toggle="tooltip" data-placement="top" title="Add profile" style="padding-right: 0.5em;padding-left: 0.5em;">
                       <div class="fa-1x">
                         <i class="fa fa-plus"></i>
                       </div>
                     </button>
-                    <div class="row template-profile no-gutters d-none" style="padding-top: 1.25em;padding-right: 1.25em;padding-bottom: 1.25em;">
-                      <button type="button" class="removeProfile close" data-toggle="tooltip" data-placement="top" title="Delete this profile" style="padding-right: 0.5em;padding-left: 0.5em;">
-                          <div class="fa-1x">
-                            <i class="fa fa-trash"></i>
-                          </div>
-                      </button>
-                      <form class="runCrawlerForm col" action="/crawlers/run">
-                        <input name="crawlerid" value="{{crawler.id}}" hidden >
-                        <input name="profileid"  hidden >
-                        <div class="row no-gutters align-items-center">
-                          <div class="col-9  align-items-center">
-                            {% for arg in crawler.args %}
-                              {% comment %} <label for="{{arg}}">{{arg}}</label> {% endcomment %}
-                              <input name="{{arg}}" class="form-control rounded-0" 
-                              placeholder="{{arg}}">
-                            {% endfor %}
-                          </div>
-
-                          <div class="col-3  text-center">
-                            <div class="row">
-                              <div class="col-6">
-                                <button type="submit" class="btn btn-primary btn-lg align-middle">
-                                    <div class="fa-1x">
-                                      <i class="fas fa-download"></i>
-                                    </div>
-                                </button>
-                                <div class="col-12 d-none loading-result" style="text-align:center;color:grey;">
-                                    <div class="fa-2x">
-                                        <i class="fas fa-circle-notch fa-spin"></i>
-                                </div>
-                                </div>
-                              </div>
-                              <div class="col-6">
-                                
+                    <div class="row no-gutters template-profile d-none " style="padding-top: 1.25em;padding-bottom: 1.25em;">
+                      
+                        <form class="runCrawlerForm col" action="/crawlers/run">
+                          <input name="crawlerid" value="{{crawler.id}}" hidden >
+                          <input name="profileid" hidden >
+                          <div class="row no-gutters align-items-center">
+                            <div class="col-1 text-center">
+                                <button type="button" class="removeProfile btn btn-outline-secondary btn-lg align-middle" data-placement="top" title="Delete this profile">
+                                    <div class="fa-1x"><i class="fa fa-trash"></i></div>
+                              </button>
+                            </div>
+                            <div class="col-10  align-items-center">
+                              {% for arg in crawler.args %}
+                                {% comment %} <label for="{{arg}}">{{arg}}</label> {% endcomment %}
+                                <input name="{{arg}}" class="form-control rounded-0" 
+                                placeholder="{{arg}}" >
+                              {% endfor %}
+                            </div>
+                            <div class="col-1  text-center">
+                              <button type="submit" class="crawler-run-button btn btn-primary btn-lg align-middle">
+                                  <div class="fa-1x"><i class="fas fa-download"></i></div>
+                              </button>
+                              <div class="col-12 d-none loading-result" style="text-align:center;color:grey;">
+                                  <div class="fa-2x"><i class="fas fa-circle-notch fa-spin"></i></div>
                               </div>
                             </div>
                           </div>
-
-                        </div>
-                      </form>       
-                    </div>
+                      
+                          <div class="error-info col-12 alert alert-dark alert-dismissible rounded-0" role="alert" style="display:none">
+                              There was an error during the execution of the crawler, try again a few minutes later if the problem persist ask for support to the small-robot team
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                        </form> 
+                              
+                      </div>
+                    
+                    
                   </div>
                 </div>
               </div>      

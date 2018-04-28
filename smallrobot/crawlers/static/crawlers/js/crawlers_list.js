@@ -10,42 +10,43 @@ function lastResult(id, dateTime, url){
 }
 
 function checkForResults(resultId) {
+  var loading = $(`.loading-result.result-${resultId}`);
+  var submitButton = $(`.crawler-run-button.result-${resultId}`);
+  var errorInfo = submitButton.closest('.runCrawlerForm').find('.error-info')
+  const endLoad = ()=>{
+    loading.removeClass(`result-${resultId}`);
+    loading.addClass('d-none');
+    submitButton.removeClass(`result-${resultId} d-none`);
+  };
   $.fileDownload(`/crawlers/result?resultid=${resultId}`, {
     successCallback: function (url) {
-      console.log('sucesscallback');
-      var rl=form.find('.loading-result');
-      rl.addClass('d-none');
+      endLoad();
     },
     failCallback: function (responseHtml, url) {
       if (responseHtml === "loading") {
         setTimeout(()=>checkForResults(resultId),35000);
         return false
       }else{
-        alert('File download failed!');
+        errorInfo.fadeIn()
+        endLoad();
+        console.log('ERROR:',responseHtml);
       }
     }
   });
-  // $.getJSON('lastresult', {'crawlerid':crawlerId},function (data) {
-  //   var cr=$('#crawler-'+crawlerId).find('.crawler-results');
-  //   var rl=cr.find('.loading-result');
-    
-  //   if (rl.next('.list-group-item').attr('id') === "result-"+data.id){
-  //     setTimeout(()=>checkForResults(crawlerId),30000);
-  //   }else{
-  //     rl.addClass('d-none');
-  //     rl.after(lastResult(data.id, data.date_time, data.url))
-  //   }
-  // })
 }
 
-$('.runCrawlerForm').submit(function (event) {
+$(document).on('submit', '.runCrawlerForm', function(event){
   event.preventDefault();
   var form=$(this);
+  form.find('.error-info').fadeOut()
   var rl=form.find('.loading-result');
+  var submitButton = form.find('.crawler-run-button')
   rl.removeClass('d-none');
+  submitButton.addClass('d-none');
   $.get( form.attr('action'), form.serialize(), function( resultId ) {
     console.log( resultId );
     rl.addClass('result-'+resultId);
+    submitButton.addClass('result-'+resultId);
     setTimeout(()=>checkForResults(resultId),35000);
   });
   // $.fileDownload(form.attr('action')+'?'+form.serialize(), {
@@ -70,6 +71,6 @@ $('.addProfile').click(function(event) {
 })
 
 $(document).on('click', '.removeProfile', function(event){
-  var profile = $(this).parent('.profile')
+  var profile = $(this).closest('.profile')
   profile.addClass('d-none deleted-profile')
 })

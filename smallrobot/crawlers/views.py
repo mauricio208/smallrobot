@@ -43,7 +43,7 @@ def run_crawler(result_id, args):
     except Exception as e:
         with transaction.atomic():
             result.error=True
-            result.error_message=str(e)
+            result.error_message=sys.exc_info()[0]
             result.save()
 
 @method_decorator(login_required, name='dispatch')
@@ -61,7 +61,6 @@ def crawler_runner(request):
     
     return: HttpResponse object with the id of the result
     """
-    import pudb; pu.db
     crawler_id = request.GET.get('crawlerid')
     crawler = Crawler.objects.get(id=crawler_id)
     args = {}
@@ -83,7 +82,6 @@ def download_protected_result(request):
 
     return: HttpResponse object with the X-Accel-Redirect header containing the path to the file to be downloaded
     """
-    import pudb; pudb.set_trace()
     result_id = request.GET.get('resultid')
     result = Result.objects.get(id=result_id)
     response = HttpResponseForbidden()
@@ -91,12 +89,13 @@ def download_protected_result(request):
         if result.error:
             response = HttpResponseServerError(result.error_message)
         elif not result.data:
-            response = HttpResponseNotFound('loading')
+            response = HttpResponse('loading')
         else:
             filename = os.path.basename(result.data.name)
             response = HttpResponse()
             response["Content-Disposition"] = "attachment; filename={0}".format(filename)
             response['X-Accel-Redirect'] = "/crawlers-results/{0}".format(filename)     
+            response.set_cookie('fileDownload', 'true')
     return response
 # @login_required
 # def crawler_last_result(request):

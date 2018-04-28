@@ -84,7 +84,6 @@ def start(user_name,password):
 
                 response_emp = session.get('https://www.danlon.dk/appl?menu1=2&menu2=1',timeout=timeout)
                 if response_emp:
-                    import pudb;pu.db
                     soup = BeautifulSoup(response_emp.text, 'html.parser')
                     select = soup.find(id='EmployeeSelectorForm_selection')
                     count = len(select.find_all('option'))
